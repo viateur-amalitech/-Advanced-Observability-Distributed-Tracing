@@ -13,15 +13,15 @@ pipeline {
         string(name: 'DOCKER_HUB_REPO', defaultValue: 'jenkins-simple-web-app', description: 'Docker Hub Repository Name')
         string(name: 'EC2_PUBLIC_IP', defaultValue: '', description: 'Target EC2 Public IP')
         string(name: 'APP_VERSION', defaultValue: '1.0.0', description: 'Application Version')
+        string(name: 'EC2_SSH_USER', defaultValue: 'ubuntu', description: 'SSH username for EC2 host (ubuntu/ec2-user)')
+        string(name: 'EC2_SSH_CREDENTIALS_ID', defaultValue: 'ec2_ssh', description: 'Jenkins Credentials ID for EC2 SSH private key')
+        string(name: 'SERVICE_NAME', defaultValue: 'web-app', description: 'Service name reported to OpenTelemetry')
+        string(name: 'OTEL_EXPORTER_OTLP_ENDPOINT', defaultValue: '', description: 'Optional OTLP base endpoint (e.g., http://jaeger:4318)')
     }
 
     environment {
         DOCKER_CREDS      = credentials('registry_creds')
-        
-        EC2_SSH_CREDS_ID  = credentials('ec2_ssh')
-        
         DOCKER_IMAGE      = "${params.DOCKER_HUB_USER}/${params.DOCKER_HUB_REPO}"
-        
         APP_MESSAGE       = "Deployment successful via Jenkins Best Practices Pipeline!"
     }
 
@@ -72,15 +72,17 @@ pipeline {
                 expression { params.EC2_PUBLIC_IP != '' }
             }
             steps {
-                sshagent(credentials: [EC2_SSH_CREDS_ID]) {
+                sshagent(credentials: [params.EC2_SSH_CREDENTIALS_ID]) {
                     echo "Deploying to ${params.EC2_PUBLIC_IP} via Ansible"
                     sh """
-                        ansible-playbook -i infra/ansible/inventory.ini infra/ansible/deploy.yml \
-                            -e "TARGET_IP=${params.EC2_PUBLIC_IP}" \
-                            -e "IMAGE_NAME=${DOCKER_IMAGE}:latest" \
-                            -e "APP_MESSAGE='${APP_MESSAGE}'" \
-                            -e "APP_VERSION='${params.APP_VERSION}'" \
-                            --ssh-common-args='-o StrictHostKeyChecking=no'
+                        set -euxo pipefail
+                        echo "${params.EC2_PUBLIC_IP} ansible_user=${params.EC2_SSH_USER}" > infra/ansible/inventory.dynamic
+                        export ANSIBLE_HOST_KEY_CHECKING=False
+                        EXTRA_VARS="IMAGE_NAME=${DOCKER_IMAGE}:${params.APP_VERSION} APP_MESSAGE='${APP_MESSAGE}' APP_VERSION='${params.APP_VERSION}' SERVICE_NAME='${params.SERVICE_NAME}'"
+                        if [ -n "${params.OTEL_EXPORTER_OTLP_ENDPOINT}" ]; then
+                          EXTRA_VARS="$EXTRA_VARS OTEL_EXPORTER_OTLP_ENDPOINT='${params.OTEL_EXPORTER_OTLP_ENDPOINT}'"
+                        fi
+                        ansible-playbook -i infra/ansible/inventory.dynamic infra/ansible/deploy.yml -e "$EXTRA_VARS"
                     """
                 }
             }

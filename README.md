@@ -1,14 +1,14 @@
-# 🚀 Professional Jenkins CI/CD Pipeline + Full Observability (Prometheus + Grafana + Jaeger + OpenTelemetry)
+# Professional Jenkins CI/CD Pipeline + Full Observability (Prometheus + Grafana + Jaeger + OpenTelemetry)
 
 An industry-standard, end-to-end CI/CD pipeline demonstrating the "Holy Trinity" of DevOps: **Infrastructure as Code** (Terraform), **Configuration as Code** (Ansible), and **Continuous Integration/Deployment** (Jenkins) — extended with a production‑grade observability stack (RED metrics, tracing, and log correlation).
 
-## 🌟 Project Overview
+## Project Overview
 
 This project automates the entire lifecycle of a Node.js web application—from the first line of code to a live, production-ready server on AWS. It implements a robust, idempotent, and secure workflow that eliminates manual intervention.
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Category | Tools Used |
 | :--- | :--- |
@@ -22,7 +22,7 @@ This project automates the entire lifecycle of a Node.js web application—from 
 
 ---
 
-## 📊 End-to-End Observability Stack
+## End-to-End Observability Stack
 
 This project implements a full observability stack (Prometheus, Grafana, Jaeger) with OpenTelemetry instrumentation:
 
@@ -48,7 +48,7 @@ Access the monitoring tools locally:
 
 ---
 
-## ⚡ Quick Start (Local, via Docker Compose)
+## Quick Start (Local, via Docker Compose)
 
 Prerequisites
 - Docker Engine 20.10+ and Docker Compose V2
@@ -97,7 +97,7 @@ Troubleshooting: Docker networking “network <id> not found”
 
 Note: Compose v2 ignores the top‑level `version:` key; the warning is benign. You can remove it later to silence the message.
 
-## 🏗️ Architecture & Workflow
+## Architecture & Workflow
 
 1. **Infrastructure (Terraform)**: Provisions an AWS EC2 instance and assigns a **Static Elastic IP**.
 2. **Configuration (Ansible)**: Installs Docker, configures permissions, and manages the application lifecycle using modular roles (`docker`, `webapp`).
@@ -111,7 +111,7 @@ Note: Compose v2 ignores the top‑level `version:` key; the warning is benign. 
 
 ---
 
-## 🔧 Application Configuration (env)
+## Application Configuration (env)
 
 The app supports the following environment variables:
 - `PORT`: HTTP port (default `3000`)
@@ -140,7 +140,7 @@ Alerting
 
 ---
 
-## ☁️ Deploy to AWS (Terraform + Ansible + Jenkins)
+## Deploy to AWS (Terraform + Ansible + Jenkins)
 
 High‑level flow
 1. Terraform provisions an EC2 instance with a static Elastic IP and security groups.
@@ -161,7 +161,7 @@ Post‑deployment verification
 
 ---
 
-## ✨ Key Industry Best Practices
+## Key Industry Best Practices
 
 - **Zero Hardcoding**: 100% parameterized pipeline. Change IP, version, or repo without touching code.
 - **Modular Ansible**: Roles-based configuration for high maintainability.
@@ -172,11 +172,11 @@ Post‑deployment verification
 
 ---
 
-## 📸 Implementation Evidence (Screenshots)
+## Implementation Evidence (Screenshots)
 
 Screenshots demonstrating successful CI/CD and deployment are stored in `docs/screenshots/`.
 
-Available images in this repository:
+All available screenshots in this repository:
 
 1. Jenkins pipeline confirmation
    - ![Jenkins Confirmation](./docs/screenshots/jenkins_confirmation.png)
@@ -184,20 +184,21 @@ Available images in this repository:
    - ![AWS EC2](./docs/screenshots/aws_ec2.png)
 3. Docker Hub repository image
    - ![Docker Hub](./docs/screenshots/docker_hub_image.png)
-
-Tip: You can augment the evidence by adding the following screenshots to the same folder (optional but recommended):
-- `grafana_dashboard.png`: Grafana dashboard with latency and error panels
-- `jaeger_traces.png`: Jaeger trace timeline for sample requests
-- `prometheus_query.png`: Prometheus UI showing the p95 query results
-- `app_verification.png`: Browser or curl output for the app’s `/` endpoint
-- `jenkins_pipeline_success.png`: Full stage view of a green pipeline
+4. Grafana dashboard
+   - ![Grafana](./docs/screenshots/grafana.png)
+5. Jaeger traces
+   - ![Jaeger](./docs/screenshots/jaeger.png)
+6. Prometheus metrics page
+   - ![Prometheus](./docs/screenshots/prometheus.png)
+7. Application /metrics endpoint sample
+   - ![Metrics](./docs/screenshots/metrics.png)
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 Most users can begin with the local Quick Start above. For a full cloud deployment walkthrough (Jenkins + Terraform + Ansible), follow the:
-👉 **[Full Runbook / Setup Guide](./docs/runbook.md)**
+**[Full Runbook / Setup Guide](./docs/runbook.md)**
 
 ### Quick Verification (Cloud)
 
@@ -206,7 +207,7 @@ Once deployed, the application is accessible via the Elastic IP output by Terraf
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 ├── app/                # Application code (Node.js/Express)
@@ -230,7 +231,7 @@ Once deployed, the application is accessible via the Elastic IP output by Terraf
 
 ---
 
-## 📄 Reports & License
+## Reports & License
 
 - Observability/Tracing Report (2 pages): `./docs/REPORT.md`
 - This project is for demonstration and production‑readiness training in DevOps engineering.
