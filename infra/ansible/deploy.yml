@@ -1,0 +1,12 @@
+---
+- name: Configure EC2 and Deploy Web Service
+  hosts: all
+  become: yes
+  vars:
+    docker_image: "{{ IMAGE_NAME }}"
+    app_message: "{{ APP_MESSAGE }}"
+    app_version: "{{ APP_VERSION }}"
+
+  roles:
+    - docker
+    - webapp

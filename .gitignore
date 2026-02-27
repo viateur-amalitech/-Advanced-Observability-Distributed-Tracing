@@ -1,0 +1,10 @@
+node_modules/
+.env
+.vscode/
+coverage/
+*.tfstate
+*.tfstate.backup
+.terraform/
+terraform.tfvars
+node_modules/.cache/
+node_modules/.cache/mongodb-memory-server/

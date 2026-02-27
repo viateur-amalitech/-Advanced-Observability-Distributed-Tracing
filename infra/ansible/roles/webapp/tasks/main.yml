@@ -1,0 +1,23 @@
+---
+- name: Pull the latest Docker image
+  docker_image:
+    name: "{{ docker_image }}"
+    source: pull
+
+- name: Run the web application container
+  docker_container:
+    name: web-app
+    image: "{{ docker_image }}"
+    state: started
+    restart: yes
+    ports:
+      - "80:3000"
+    env:
+      APP_MESSAGE: "{{ app_message }}"
+      APP_VERSION: "{{ app_version }}"
+
+- name: Remove unused images
+  docker_prune:
+    images: yes
+    images_filters:
+      dangling: false

@@ -1,0 +1,29 @@
+---
+- name: Ensure Docker is installed (Amazon Linux 2)
+  yum:
+    name: docker
+    state: present
+
+- name: Ensure Docker service is started and enabled
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Ensure ec2-user is in the docker group
+  user:
+    name: ec2-user
+    groups: docker
+    append: yes
+
+- name: Install python3-pip (needed for docker module)
+  yum:
+    name: python3-pip
+    state: present
+
+- name: Install 'docker' python package
+  pip:
+    name: docker
+
+- name: Reset connection so group changes take effect
+  meta: reset_connection
